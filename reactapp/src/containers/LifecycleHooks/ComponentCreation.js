@@ -21,7 +21,7 @@ class app extends Component {
     }
     render(){                        //    => 3rd lifecycle hooks
         return(
-            <Person></Person> //=> 4th All child components are rendered
+            <Person></Person>       //=> 4th All child components are rendered
         )
     }
 }
