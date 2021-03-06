@@ -10,9 +10,20 @@ import { Provider } from 'react-redux';
 const rootReducer = combineReducers({
     ctr: reducer1,
     res: reduecr2
-})
+});
 
-const Store = createStore(rootReducer);
+//Middleware logic
+const Logger = store => {
+    return next => {
+        return action => {
+            console.log('This is middleware');
+            const result = next(action);
+            return result;
+        }
+    }
+}
+
+const Store = createStore(rootReducer, Logger);
 
 ReactDOM.render(<Provider store={Store}>
     <App />
