@@ -23,7 +23,7 @@ const Logger = store => {
     }
 }
 
-const Store = createStore(rootReducer, Logger);
+const Store = createStore(rootReducer, applyMiddleware(Logger));
 
 ReactDOM.render(<Provider store={Store}>
     <App />
