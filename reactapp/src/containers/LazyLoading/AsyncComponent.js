@@ -22,3 +22,8 @@ const asyncComponent = (importComponent) => {
 }
 
 export default asyncComponent;
+            
+            
+   const AsyncNewPost = asyncComponent(() => {
+    return import('./NewPost/NewPost');
+});

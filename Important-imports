@@ -1,0 +1,15 @@
+Routing
+==============
+install react-router and react-router-dom
+
+import {Route, Links., Navlinks, withRouter} from 'react-router'
+import {BrowserRouter} from 'react-router-dom';
+
+Redux
+===============
+ install react-redux , redux, redux-thunk, redux-saga
+ 
+ import {createStore, appluMiddleware, createSagaMiddleware, combineReducers} from 'redux',
+ import {Provider} from 'react-redux'
+ import thunk from 'redux-thunk';
+ import {put, takeEvery} from 'readu-saga/effects'
