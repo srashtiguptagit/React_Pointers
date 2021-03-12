@@ -37,7 +37,8 @@ class Auth extends Component {
 
     clickHandler = (event) => {
         event.preventDefault();
-        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value);
+        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value,
+            this.state.isSignUp);
     }
 
     switchLoginHandler = () => {
@@ -63,7 +64,7 @@ class Auth extends Component {
 
 const mapDispatchToProps = dispatch => {
     return{
-        onAuth = (email, passowrd) => {dispatch(actionTypes.auth(email, password))}
+        onAuth = (email, passowrd, isSignUp) => {dispatch(actionTypes.auth(email, password, isSignUp))}
     }
 }
 
@@ -78,6 +79,7 @@ export default connect(null, mapDispatchToProps) (Auth);
 export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAILED = 'AUTH_FAILED';
+export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 
 
 // Action dispatchers
@@ -88,20 +90,37 @@ export const authStart = () => {
     }
 }
 
-export const authSuccess = (authData) => {
+export const authSuccess = (idToken, localId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        authData: authData
+        idToken: idToken,
+        localId: idToken
     }
  }
 
  export const authFailed = (error) => {
     return {
-        type: actionTypes.AUTH_FAILED
+        type: actionTypes.AUTH_FAILED,
+        error: error
     }
  }
 
-export const auth = (email, password) => {
+ export const authLogout = () => {
+     return{
+         type: actionTypes.AUTH_LOGOUT
+     }
+ }
+
+ export const setExpirtationTimeOut = (expirationTime) => {
+     return dispatch => {
+         return setTimeout(()=> {
+             dispatch(authLogout());
+         }, expirationTime)
+
+     }
+ }
+
+export const auth = (email, password, isSignUp) => {
     return dispatch => {
         dispatch(authStart());
         const reqData = {
@@ -109,10 +128,78 @@ export const auth = (email, password) => {
             password: password,
             returnSecureToken: true
         }
+
+        const baseUrl ='gfehgqwfehgwqfehgwqfeghfqwgh';
+        if(isSignUp) {
+            url  = baseUrl + 'SIGNUP'
+        }
+        else {
+            url = baseUrl + 'SIGNIN'
+        }
        axios.post('url', reqData).then((res)=>{
-           dispatch(authSuccess(res.data));
+           dispatch(authSuccess(res.data.idToken, res.data.localId));
+          dispatch(setExpirtationTimeOut(res.data.expiresIn));
        }).catch((error) => {
            dispatch(authFailed(error));
        })
     }
 }
+
+// Step 5: Is to store the  token:
+
+//under reducers => Auth.reducer.js
+
+const initalState = {
+    token: null,
+    loading: false,
+    userId: null,
+    error: null
+
+}
+
+const authReducer = (state= initalState, action) =>{
+   switch(action.type){
+       case('AURH_START'):
+       return {
+           loading: true
+       }
+       case('AUTH_SUCCESS'):
+       return {
+           token: action.tokenId,
+           loading: false,
+           userId: action.userId,
+           error: null
+       }
+       case('AUTH_FAIL'):
+       return {
+           error: error
+       }
+       case('AUTH_LOGOUT'):
+       return {
+           token: null,
+           error: null,
+           userId: null
+       }
+   }
+}
+
+
+
+// Now suppose I want to have authorized access to some tab eg: Order tab
+
+// Now in that component's action dispatcher before we make a get call we need to add token but that 
+// token is in our auth reducer so then how do we acccess that token
+
+//Ordercomponent
+
+const mapstateToProps = state => {
+    token: state.auth.token
+}
+
+// auth because in 
+rootReducer = combineRedcuers({
+    auth: AuthReducer,
+    orders: OrderReducer
+}) 
+
+
