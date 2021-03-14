@@ -196,10 +196,69 @@ const mapstateToProps = state => {
     token: state.auth.token
 }
 
+axios.post('http://gdgdg/dhdhdhd?auth=' + token);
+
 // auth because in 
 rootReducer = combineRedcuers({
     auth: AuthReducer,
     orders: OrderReducer
 }) 
+
+// We cannot connect redux with functional componnets thus in order to manupalate the state
+// we should try find closet class based component
+
+// In order to design the logout component
+import {Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
+
+class logout extends Component {
+    componnetDidMount () {
+            this.props.onLogoutClicked();
+    }
+    render() {
+        return (
+            <Redirect to="/" />
+        )
+    }
+}
+    const mapDispatchToProps = dispatch =>{
+        return {
+            onLogoutClicked = () => dispatch({type: actionTypes.authLogout()})
+        }
+    }
+
+
+
+    // Implementing guards in the application
+
+class Naviagtion extends Component {
+    render() {
+        let routes = (
+            <Switch>
+            <Route to="/C" component={ABC} />
+            <Route to="/D" component={ABC} />
+            </Switch>
+        );
+        if(this.props.isAuthenticated) {
+            routes = (
+                <Switch>
+                <Route to="/" component={ABC} />
+                <Route to="/A" component={ABC} />
+                <Route to="/B" component={ABC} />
+                </Switch>
+            )
+        }
+        return (
+            {routes}
+        )
+    }
+}
+
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.isAuthenticated
+    }
+}
+
 
 
