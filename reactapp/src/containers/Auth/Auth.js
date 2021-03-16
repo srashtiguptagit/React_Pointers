@@ -44,7 +44,7 @@ class Auth extends Component {
     switchLoginHandler = () => {
         this.setState(prevState => {
             return {
-                isSignUp: !prevState.isSignUp
+                isSignUp: !prevStahjwte.isSignUp
             };  
         })
 
