@@ -3,12 +3,13 @@
 //npm install --save-dev webpack@4
 
 // Webpack is basically a bundler which concatenates the files and optimizes the files
-// and hook in various plugins to transfrom the files eg: Transpile the next generation JS to current generarttion JS
+// and hook in various plugins to transfrom the files eg: Transpile the next generation JS to current 
+// generarttion JS
 
 // Webpack basically combines JS files , css files into their bundles and then opyimises everything
 
 // How it works
-// 1 . It needs an entry point i the application generally app.js where the application is mounted to DOM. so webpack
+// 1 . It needs an entry point in the application generally app.js where the application is mounted to DOM. so webpack
 // creates an entry point by analysing the dependiences from the root file
 
 // 2. It then bundles all the dependecies as bundle.js in the dist folder which is correctly ordered as per 
